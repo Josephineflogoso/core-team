@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600,700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 15px;
+}
+
+.user-cart span{
+    background-color:#ff7200; 
+    padding-right:3px; 
+    padding-left:3px;  
+    border-radius:10px; 
+    font-size:15px;
+    margin-left:-1.2rem;
+}
+
+/* admin dashboard styling */
+  .card{
+      background-color: rgb(218, 221, 221);
+      padding:10px;
+      margin: 6px;
+      border-radius: 5px;
+      box-shadow: rgb(62, 62, 153);
+  }
+  
+  .card:hover{
+    cursor:pointer;
+    outline:#000;
+    outline-offset: 2rem;
+
+  }
+/*** for sidebar ***/
+
+  /* The sidebar menu */
+  .sidebar {
+      height: 100%; 
+      width: 0; 
+      position: fixed; 
+      z-index: 1; 
+      top: 0;
+      left: 0;
+      background-color: #064770; 
+      overflow-x: hidden; 
+      padding-top: 30px; 
+      transition: 0.5s; 
+    }
+    
+    /* The sidebar links */
+    .sidebar a {
+      padding: 6px 6px 6px 30px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #fff;
+      display: block;
+      transition: 0.3s;
+    }
+    
+    .sidebar .side-header{
+          margin-left: 20px;
+          margin-bottom: 8px;
+          color: #fff;
+      }
+      .sidebar .side-header .nav-item .nav-edit_branch p{
+          font-size: 14px;
+      }
+  
+    /* When you mouse over the navigation links, change their color */
+    .sidebar a:hover {
+      background-color: #ff7200;
+      
+    }
+    
+    /* The button used to open the sidebar */
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      padding: 10px 15px;
+      border: none;
+      color: #fff;
+      background-color:#064770;
+    }
+    
+    .openbtn:hover {
+      color: #ff7200;
+    }
+    
+    /* Style page content */
+    #main {
+      transition: margin-left .5s;
+      padding: 20px;
+    }
+    
+    
+     /* On smaller screens, where height is less than 768px, change the style of the sidenav (less padding and a smaller font size) */
+    @media (max-width:768px){
+      .navbar {width:800px}
+      .sidebar {padding-top: 15px;}
+      .sidebar a {font-size: 18px;}
+      .container allContent-section py-4 {padding-left: 10px;}
+    }
+
+    /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+    @media screen and (max-height: 450px) {
+      .navbar {width:450px}
+      .sidebar {width: 5px;}
+      .sidebar {padding-top: 10px;}
+      .sidebar a {font-size: 10px;}
+      .container allContent-section py-4 {padding-left: 10px;}
+    }
+
+/********product table styling ********/
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 2px 15px transparent;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 50px;
+
+  }
+
+  td,
+  th {
+    padding: 5px 10px;
+    text-align: center;
+  }
+
+  th {
+    background-color: rgb(224, 233, 252);
+    color: #000;
+    font-family: 'Open Sans', Sans-serif;
+    font-weight: bold;
+  }
+
+  tr {
+    width: 100%;
+    background-color: #fafafa;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eeeeee;
+  }
+
+/* products*/
+
+  .form-group .button.btn.btn-primary a{
+    text-decoration: none;
+  }
+
+ 
+
+
+
+
+
