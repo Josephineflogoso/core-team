@@ -54,6 +54,7 @@ $fetch_customer = mysqli_fetch_assoc($customer_query);
          $availed_query = mysqli_query($conn, "SELECT * FROM `tbl_availed` WHERE customer_id = '$customer_id'") or die('query failed');
          if(mysqli_num_rows($availed_query) > 0){
             while($fetch_services = mysqli_fetch_assoc($availed_query)){
+                $code = $fetch_services['transac_code'];
               
       ?>
             <div class="box">
@@ -64,9 +65,18 @@ $fetch_customer = mysqli_fetch_assoc($customer_query);
                 <p>Address:
                     <span><?php echo $fetch_services['purok'] . ', ' . $fetch_services['barangay'] . ', ' . $fetch_services['municipality'] . ', ' . $fetch_services['province']; ?></span>
                 </p>
-                <p> Services Availed: <span><?php echo $fetch_services['services_name']; ?></span> </p>
-               
-                <p> Services status : <span> <?php if($fetch_services['services_status'] == 0)
+                <p> Services Availed:
+                <?php 
+                $getInquiry=mysqli_query($conn, "SELECT * FROM tbl_inquiry WHERE transac_code = '$code'");
+                while($inquiryRow = mysqli_fetch_assoc($getInquiry))
+                {
+                    ?>
+                    <span><?php echo $inquiryRow['services_name']; ?>, </span>
+                    <?php
+                }
+                ?>
+                 </p>
+                <p> Services status : <span> <?php if($fetch_services['status'] == 0)
          {
             echo "Pending";
          }

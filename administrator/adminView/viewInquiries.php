@@ -19,12 +19,24 @@
       $count=1;
       if ($result-> num_rows > 0){
         while ($row=$result-> fetch_assoc()) {
+          $code=$row['transac_code'];
     ?>
 
     <tr>
     <td><?=$count?></td>
       <td><?=$row["customer_id"]?></td>
-      <td><?=$row["services_name"]?></td>
+      <td>
+        <?php
+        $getInquiry = mysqli_query($conn, "SELECT * FROM tbl_inquiry WHERE customer_id = $row[customer_id] and transac_code = '$code'");
+        while($inquiryRow=mysqli_fetch_assoc($getInquiry))
+        {
+          ?><ul style="text-align:left;">
+          <li><?php echo $inquiryRow['services_name']; ?></span></li>
+          </ul>
+          <?php
+        }
+        ?>
+      </td>
       <td><?=$row["purok"]?>, <?=$row["barangay"]?>, <?=$row["municipality"]?>, <?=$row["province"]?></td>     
       <td><?=$row["date"]?></td>    
        
@@ -33,12 +45,12 @@
                 if($row["status"]==0){
                             
             ?>
-                <td><button class="btn btn-danger" onclick="ChangeStatus('<?=$row['id']?>')">Pending </button></td>
+                <td><button class="btn btn-danger" onclick="ChangeStatus('<?=$row['avail_id']?>', 1)">Pending </button></td>
             <?php
                         
                 }else{
             ?>
-                <td><button class="btn btn-success" onclick="ChangeStatus('<?=$row['id']?>')">Complete</button></td>
+                <td><button class="btn btn-success" onclick="ChangeStatus('<?=$row['avail_id']?>')">Complete</button></td>
         
             <?php
                 }

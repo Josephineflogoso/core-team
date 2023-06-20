@@ -95,17 +95,33 @@ if(!isset($customer_id)){
    <form action="" method="post">
       <h3>Confirm Your Services</h3>
       <div class="flex">
+         <?php
+      $getLocation=mysqli_query($conn, "SELECT * FROM tbl_availed WHERE customer_id = $customer_id limit 1");
+            if(mysqli_num_rows($getLocation) > 0)
+            {
+               $row=mysqli_fetch_assoc($getLocation);
+               $purok1=$row['purok'];
+               $barangay1=$row['barangay'];
+               $municipality1 = $row['municipality'];
+            }
+            else
+            {
+               $purok1;
+               $barangay1="";
+               $municipality1 ="";
+            }
+            ?>
          <div class="inputBox">
             <span>Purok:</span>
-            <input type="number" min="1" name="purok" required placeholder="e.g. Purok No." value="<?php if(isset($_POST['purok'])) { echo $_POST['purok']; } ?>">
+            <input type="number" min="1" name="purok" required placeholder="e.g. Purok No." value="<?php if(isset($_POST['purok'])) { echo $_POST['purok']; }else {echo $purok1;} ?>">
          </div>
          <div class="inputBox" required>
             <span>Municipality:</span>
-            <input type="text" name="municipality" placeholder="Enter your municipality" required value="<?php if(isset($_POST['municipality'])) { echo $_POST['municipality']; } ?>">
+            <input type="text" name="municipality" placeholder="Enter your municipality" required value="<?php if(isset($_POST['municipality'])) { echo $_POST['municipality']; }else{echo $municipality1;} ?>">
          </div>
          <div class="inputBox" required>
             <span>Barangay:</span>
-            <input type="text" name="barangay" placeholder="Enter your barangay" value="<?php if(isset($_POST['barangay'])) { echo $_POST['barangay']; } ?>" required>
+            <input type="text" name="barangay" placeholder="Enter your barangay" value="<?php if(isset($_POST['barangay'])) { echo $_POST['barangay']; }else{echo $barangay1;} ?>" required>
          </div>
       </div>
       <input type="hidden" name="services_name" value="<?php echo $fetch_services['services_name']; ?>">
@@ -115,14 +131,18 @@ if(!isset($customer_id)){
 <?php
 
 if(isset($_POST['confirm_now'])){
-   $services_name = $_POST['services_name'];
+   $getTransacCode = mysqli_query($conn, "SELECT * FROM tbl_inquiry WHERE customer_id = $customer_id and status = 0 limit 1 ");
+   $inquiryRow = mysqli_fetch_assoc($getTransacCode);
+   $transac_code = $inquiryRow['transac_code'];
    $purok = $_POST['purok'];
    $barangay = $_POST['barangay'];
    $municipality = $_POST['municipality'];
 
    $updateInquiryStatus = mysqli_query($conn, "UPDATE tbl_inquiry SET status = 1 where customer_id = $customer_id and status = 0");
 
-   $insert_query = "INSERT INTO `tbl_availed` (customer_id, services_name, purok, barangay, municipality) VALUES ('$customer_id', '$services_name', '$purok', '$barangay', '$municipality')";
+ 
+
+   $insert_query = "INSERT INTO `tbl_availed` (customer_id, purok, barangay, municipality,transac_code) VALUES ('$customer_id', '$purok', '$barangay', '$municipality','$transac_code')";
 
    if(mysqli_query($conn, $insert_query)){
       echo "

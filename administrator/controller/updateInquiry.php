@@ -5,7 +5,7 @@
     $status= $_POST['status'];
 
     $updateInquiry = mysqli_query($conn,"UPDATE tbl_inquiry SET 
-        status='$status',
+        status=$status
         WHERE inquiry_id=$inquiry_id");
 
     if($updateInquiry)
