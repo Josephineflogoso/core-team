@@ -38,7 +38,7 @@ if(isset($message)){
                $select_wishlist_number = mysqli_query($conn, "SELECT * FROM `tbl_wishlist` WHERE customer_id = '$customer_id'") or die('query failed');
                $wishlist_rows_number = mysqli_num_rows($select_wishlist_number);
 
-               $select_inquiry_number = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id'") or die('query failed');
+               $select_inquiry_number = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id' AND status = 0") or die('query failed');
                $inquiry_rows_number = mysqli_num_rows($select_inquiry_number);
             ?>
                 <a href="wishlist.php" title="Wishlist"> <i class="fas fa-heart"></i> <span>(<?php echo $wishlist_rows_number; ?>)</span>

@@ -65,31 +65,7 @@ if(!isset($customer_id)){
    exit;
 }
 
-if(isset($_POST['confirm_now'])){
-    $services_name = $_POST['services_name'];
-    $purok = $_POST['purok'];
-    $barangay = $_POST['barangay'];
-    $municipality = $_POST['municipality'];
 
-    $insert_query = "INSERT INTO `tbl_availed` (customer_id, services_name, purok, barangay, municipality) VALUES ('$customer_id', '$services_name', '$purok', '$barangay', '$municipality')";
-
-    if(mysqli_query($conn, $insert_query)){
-       echo "
-          <script>
-             Swal.fire({
-                icon: 'success',
-                title: 'Services Availed',
-                text: 'Your services have been availed successfully.',
-                showConfirmButton: false,
-                timer: 3000
-             }).then(function() {
-                window.location.href = 'availedServices.php';
-             });
-          </script>";
-    } else {
-       die('Query failed: ' . mysqli_error($conn));
-    }
-}
 ?>
 
 <?php include 'header.php'; ?>
@@ -104,6 +80,7 @@ if(isset($_POST['confirm_now'])){
    $select_services = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id' AND status = 0") or die('query failed');
    if(mysqli_num_rows($select_services) > 0) {
       while($fetch_services = mysqli_fetch_assoc($select_services)) {
+         $services_name = $fetch_services['services_name'];
          ?>
          <p><?php echo $fetch_services['services_name']; ?></p>
          <?php
@@ -135,6 +112,37 @@ if(isset($_POST['confirm_now'])){
       <input type="submit" value="Confirm Now" class="btn" name="confirm_now">
    </form>
 </section>
+<?php
+
+if(isset($_POST['confirm_now'])){
+   $services_name = $_POST['services_name'];
+   $purok = $_POST['purok'];
+   $barangay = $_POST['barangay'];
+   $municipality = $_POST['municipality'];
+
+   $updateInquiryStatus = mysqli_query($conn, "UPDATE tbl_inquiry SET status = 1 where customer_id = $customer_id and status = 0");
+
+   $insert_query = "INSERT INTO `tbl_availed` (customer_id, services_name, purok, barangay, municipality) VALUES ('$customer_id', '$services_name', '$purok', '$barangay', '$municipality')";
+
+   if(mysqli_query($conn, $insert_query)){
+      echo "
+         <script>
+            Swal.fire({
+               icon: 'success',
+               title: 'Services Availed',
+               text: 'Your services have been availed successfully.',
+               showConfirmButton: false,
+               timer: 3000
+            }).then(function() {
+               window.location.href = 'availedServices.php';
+            });
+         </script>";
+   } else {
+      die('Query failed: ' . mysqli_error($conn));
+   }
+}
+
+?>
 
 <?php include 'footer.php'; ?>
 

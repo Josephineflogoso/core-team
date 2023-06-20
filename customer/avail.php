@@ -102,7 +102,7 @@ if(isset($_GET['delete'])){
 
    <div class="box-container">
       <?php
-         $select_inquiry = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id'") or die('query failed');
+         $select_inquiry = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id' and status=0 ") or die('query failed');
          if(mysqli_num_rows($select_inquiry) > 0){
             while($fetch_inquiry = mysqli_fetch_assoc($select_inquiry)){   
       ?>
