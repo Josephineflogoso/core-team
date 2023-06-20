@@ -110,26 +110,42 @@ if(isset($_POST['order_now'])){
                <option value="Pick up">Pick up</option>
             </select>
          </div>
+         <?php
+            $getLocation=mysqli_query($conn, "SELECT * FROM tbl_order WHERE customer_id = $customer_id limit 1");
+            if(mysqli_num_rows($getLocation) > 0)
+            {
+               $row=mysqli_fetch_assoc($getLocation);
+               $purok1=$row['purok'];
+               $barangay1=$row['barangay'];
+               $municipality1 = $row['municipality'];
+            }
+            else
+            {
+               $purok1;
+               $barangay1="";
+               $municipality1 ="";
+            }
+         ?>
          <div class="inputBox">
             <span>Purok :</span>
             <input type="number" min="1" name="purok" required placeholder="e.g. purok no." value="<?php if(isset($_POST['purok']))
             {
                echo $_POST['purok'];
-            } ?>">
+            } else{ echo $purok1;}?>">
          </div>
          <div class="inputBox" required>
             <span>Municipality :</span>
             <input type="text" name="municipality"  placeholder="enter your municipality" required value="<?php if(isset($_POST['municipality']))
             {
                echo $_POST['municipality'];
-            } ?>">
+            }else{echo $municipality1;} ?>">
          </div>
          <div class="inputBox" required>
             <span>Barangay :</span>
             <input type="barangay" name="barangay"  placeholder="enter your barangay" value="<?php if(isset($_POST['barangay']))
             {
                echo $_POST['barangay'];
-            } ?>" required>
+            }else{echo $barangay1; } ?>" required>
             </div>
       </div>
        <p>If you choose cash on delivery (COD) as your payment method, you must first pay <span>30%</span> of your total payment through Gcash or Palawan. 
@@ -239,7 +255,7 @@ while($rows=mysqli_fetch_assoc($cart_query1))
 }
 
   
-      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name, quantity, `30%`, remaining,total_amount) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$cart_total', '" . implode(', ', $cart_products) . "', '" . count($cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment')";
+      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$cart_total', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment')";
       $query=mysqli_query($conn, $sql);
       if ($query) {
         
