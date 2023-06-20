@@ -229,8 +229,10 @@ if(isset($_POST['order_now']))
    $cart_total = 0;
    $cart_products = array();
 
-  $cart_query = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id'") or die('query failed');
+  $cart_query = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status = 0") or die('query failed');
    if(mysqli_num_rows($cart_query) > 0){
+      $getTransac_code = mysqli_fetch_assoc($cart_query);
+      $transac_code = $getTransac_code['transac_code'];
       while($cart_item = mysqli_fetch_assoc($cart_query)){
          $cart_products[] = $cart_item['product_name'].' ('.$cart_item['quantity'].') ';
          $sub_total = ($cart_item['price'] * $cart_item['quantity']);
@@ -255,7 +257,7 @@ while($rows=mysqli_fetch_assoc($cart_query1))
 }
 
   
-      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$cart_total', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment')";
+      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount,transac_code) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$cart_total', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment','$transac_code')";
       $query=mysqli_query($conn, $sql);
       if ($query) {
         

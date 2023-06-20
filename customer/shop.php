@@ -77,7 +77,6 @@ if(isset($_POST['add_to_cart'])){
    $product_quantity = $_POST['product_quantity'];
 
    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
-
    if(mysqli_num_rows($check_cart_numbers) > 0){
       echo '<script>
       Swal.fire({
@@ -92,7 +91,20 @@ if(isset($_POST['add_to_cart'])){
       })
    </script>';
    }else{
-      mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image')") or die('query failed');
+      $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
+     
+      if(mysqli_num_rows($check_cart_numbers1) > 0 )
+      {
+         $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
+         $transaction_code = $existing_cart_item['transac_code'];
+      }
+      else
+      {
+         $transaction_code = generateTransactionCode();
+      }
+    
+ 
+      mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image, transac_code) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image', '$transaction_code')") or die('query failed');
      
       echo '<script>
       Swal.fire({
@@ -110,6 +122,16 @@ if(isset($_POST['add_to_cart'])){
 
    }
 
+}
+function generateTransactionCode(){
+      $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $code_length = 8;
+      $transaction_code = '';
+      for ($i = 0; $i < $code_length; $i++) {
+         $index = rand(0, strlen($characters) - 1);
+         $transaction_code .= $characters[$index];
+      }
+   return $transaction_code;
 }
 
 if(isset($_POST['add_to_wishlist'])){

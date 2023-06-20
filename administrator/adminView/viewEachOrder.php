@@ -27,6 +27,7 @@ session_start();
         while ($row=$result-> fetch_assoc()) {
           $id=$row['customer_id'];
           $Oid=$row['order_id'];
+          $tcode = $row['transac_code'];
     ?>
        <tr>
           <td><?=$row["order_id"]?></td>
@@ -80,9 +81,9 @@ session_start();
             ?>
             
              
-            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<?php echo $id; ?>">View</button>
+            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<?php echo $tcode; ?>">View</button>
           <!-- Modal -->
-<div class="modal fade" id="<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="<?php echo $tcode; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
 <div class="modal-dialog modal-lg">
   <!-- Modal content-->
@@ -112,7 +113,7 @@ session_start();
     </tr>
   </thead>
   <?php
-    $sql2="SELECT * from tbl_cart WHERE customer_id=$id";
+    $sql2="SELECT * from tbl_cart WHERE transac_code= '$tcode'";
     $result2=$conn->query($sql2);
     $count=1;
     if ($result2-> num_rows > 0){
