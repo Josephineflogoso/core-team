@@ -215,9 +215,17 @@ function updateAdmin() {
     contentType: false,
     
     success: function (data) {
-      alert("Data Update Success.");
-      $("form").trigger("reset");
-      showAdmin();
+      Swal.fire({
+        title: "Update Admin",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $("form").trigger("reset");
+          showAdmin();
+        }
+      });
     },
   });
 }

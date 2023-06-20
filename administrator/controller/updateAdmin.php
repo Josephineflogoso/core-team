@@ -14,7 +14,7 @@ $updateAdmin = mysqli_query($conn, "UPDATE tbl_admin SET
 
 if ($updateAdmin) {
     echo "success";
-    header("Location: ../administrator/index.php#admin");
+    header("Location: ../index.php#admin");
 } else {
     echo mysqli_error($conn);
 }
