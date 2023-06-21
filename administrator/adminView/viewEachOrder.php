@@ -15,7 +15,7 @@ session_start();
         <th>Order method</th>
         <th>Date</th>
         <th>Time</th>
-        <th class="text-center" colspan="2">More Details</th>
+        <th class="text-center" colspan="3">Actions</th>
      </tr>
     </thead>
     
@@ -44,43 +44,44 @@ session_start();
           <td><?=$row["method"]?></td>     
           <td><?=$row["date"]?></td> 
           <td><?=$row["time"]?></td> 
-           <?php 
-                if($row["order_status"]==0){
-                            
+          <?php
+          if($row['order_status'] == 'Cancelled')
+          {
             ?>
-                <td><button class="btn btn-warning" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">Pending </button></td>
+               <td colspan="2"><button class="btn btn-danger">Cancelled</button></td>
             <?php
-                        
-                }else if($row["order_status"]==1){
-            ?>
-                <td><button class="btn btn-success">Complete</button></td>
+          }
+          else
+          {
+            if($row['order_status'] == 'Pending')
+            {
+              ?>
+                <td><button class="btn btn-warning" onclick="ChangeOrderStatus('<?=$row['order_id']?>','Completed')">Pending</button></td>
+              <?php
+            }
+            else if($row['order_status'] == 'Completed')
+            {
+              ?>
+                 <td colspan ="2"><button class="btn btn-success">Completed</button></td>
+              <?php
+            }
+            if($row['order_status'] == 'Pending')
+            {
+              ?>
+               <td><button class="btn btn-danger" onclick="ChangeOrderStatus('<?=$row['order_id']?>','Cancelled')">Cancel</button></td>
+              <?php
+            }
+            else
+            {
+              echo "";
+            }
+          }
+
         
-            <?php
-                }
-                else
-                {
-                  ?>
-                    <td><button class="btn btn-danger">Cancelled</button></td>
-                  <?php
-                }
-            ?>
-            <?php
 
-                if($row['order_status']==1 && $row['order_status']!=2)
-                { 
-
-                }
-                else
-                {
-                  ?>
-
-<td><button class="btn btn-danger" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">Cancel</button></td>
-<?php
-                }
-
-            ?>
-            
-             
+          ?>
+         
+         
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<?php echo $tcode; ?>">View</button>
           <!-- Modal -->
 <div class="modal fade" id="<?php echo $tcode; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

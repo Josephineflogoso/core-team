@@ -496,14 +496,13 @@ function showOrders() {
   });
 }
 
-function ChangeOrderStatus(id) {
+function ChangeOrderStatus(id,status) {
   $.ajax({
     url: "./controller/updateOrderStatus.php",
     method: "post",
-    data: { record: id },
+    data: { id: id, status:status },
     success: function (data) {
       alert("Order Status updated successfully");
-      $("form").trigger("reset");
       showOrders();
     },
   });

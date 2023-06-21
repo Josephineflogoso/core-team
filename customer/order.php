@@ -65,7 +65,17 @@ $fetch_customer = mysqli_fetch_assoc($customer_query);
                     <span><?php echo $fetch_orders['purok'] . ', ' . $fetch_orders['barangay'] . ', ' . $fetch_orders['municipality'] . ', ' . $fetch_orders['province']; ?></span>
                 </p>
                 <p> Order method : <span><?php echo $fetch_orders['method']; ?></span> </p>
-                <p> your orders : <span><?php echo $fetch_orders['product_name']; ?></span> </p>
+                <p> your orders :
+                <?php 
+                $getItems=mysqli_query($conn, "SELECT * FROM tbl_cart WHERE transac_code = '$fetch_orders[transac_code]' and customer_id = $customer_id");
+                while($itemsRow = mysqli_fetch_assoc($getItems))
+                {
+                    ?>
+                    <span><?php echo $itemsRow['product_name']; ?>(<?php echo $itemsRow['quantity']; ?>), </span>
+                    <?php
+                }
+                ?>
+                </p>
                 <?php
                 if($fetch_orders['method'] == "Pick up")
                 {
