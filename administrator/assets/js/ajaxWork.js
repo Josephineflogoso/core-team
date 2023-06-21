@@ -106,16 +106,22 @@ function showInquiries() {
   });
 }
 
-function ChangeStatus(id) {
-  $.ajax({
-    url: "./controller/updateInquiry.php",
-    method: "post",
-    data: { record: id },
-    success: function (data) {
-      alert("Inquiry Status updated successfully");
-      $("form").trigger("reset");
-      showInquiries();
+function ChangeStatus(id, status) {
+  fetch('./controller/updateInquiry.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
+    body: `id=${encodeURIComponent(id)}&status=${encodeURIComponent(status)}`,
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert("Inquiry Status updated successfully");
+    showInquiries();
+    console.log(id, status);
+  })
+  .catch(error => {
+    console.error('Error:', error);
   });
 }
 

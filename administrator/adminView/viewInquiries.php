@@ -14,7 +14,7 @@
     </thead>
     <?php
       include_once "../config/dbconnect.php";
-      $sql="SELECT * from tbl_availed";
+      $sql="SELECT * from tbl_availed a inner join tbl_customer c on a.customer_id = c.customer_id";
       $result=$conn-> query($sql);
       $count=1;
       if ($result-> num_rows > 0){
@@ -24,7 +24,7 @@
 
     <tr>
     <td><?=$count?></td>
-      <td><?=$row["customer_id"]?></td>
+      <td><?=$row["name"]?></td>
       <td>
         <?php
         $getInquiry = mysqli_query($conn, "SELECT * FROM tbl_inquiry WHERE customer_id = $row[customer_id] and transac_code = '$code'");
@@ -45,14 +45,21 @@
                 if($row["status"]==0){
                             
             ?>
-                <td><button class="btn btn-danger" onclick="ChangeStatus('<?=$row['avail_id']?>', 1)">Pending </button></td>
+                <td><button class="btn btn-danger" onclick="ChangeStatus('<?=$row['avail_id']?>',1)">Pending </button></td>
             <?php
                         
-                }else{
+                }else if ($row["status"] == 1){
             ?>
-                <td><button class="btn btn-success" onclick="ChangeStatus('<?=$row['avail_id']?>')">Complete</button></td>
+                <td><button class="btn btn-warning" onclick="ChangeStatus('<?=$row['avail_id']?>',2)">Ongoing</button></td>
         
             <?php
+                }
+                else
+                {
+                  ?>
+                  <td><button class="btn btn-success">Completed</button></td>
+          
+              <?php
                 }
             ?>
       </tr>

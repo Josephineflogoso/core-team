@@ -80,10 +80,15 @@ $fetch_customer = mysqli_fetch_assoc($customer_query);
          {
             echo "Pending";
          }
-         else{
-            echo "Complete";
+         else if($fetch_services['status'] == 1){
+            echo "Ongoing";
 
-           } ?>
+           } 
+           else
+           {
+            echo "Complete";
+           }
+            ?>
 
 
                     </span> </p>
