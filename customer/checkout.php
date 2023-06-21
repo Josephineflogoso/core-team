@@ -187,23 +187,25 @@ else
    $shipping_fee = 0;
 }
 
-
+$grand = $grand_total + $shipping_fee;
+$thirtyPercent = $grand * .30;
+$remaining = $grand - $thirtyPercent;
 
 ?>
 <form action="" method = "POST">
 <div class="results">
 <p class="result1">Sub Total: ₱<?php echo $grand_total; ?></p>
-                <p class="result1">Shipping Fee: ₱<?php echo $shipping_fee; ?></p>
-                <p class="result1">Total Payment: ₱<?php echo $grand_total + $shipping_fee; ?></p>
+                <p class="result1">Shipping Fee: ₱<?php echo number_format($shipping_fee,2); ?></p>
+                <p class="result1">Total Payment: ₱<?php echo number_format($grand,2); ?></p>
                 <br>
-                <p class="result1">30% of Total Payment: ₱<?php echo ($grand_total + $shipping_fee) * 0.3; ?></p>
-                <p class="result1">Remaining Total: ₱<?php echo ($grand_total + $shipping_fee) * 0.7; ?></p>
+                <p class="result1">30% of Total Payment: ₱<?php echo number_format($thirtyPercent,2); ?></p>
+                <p class="result1">Remaining Total: ₱<?php echo number_format($remaining,2); ?></p>
           <br>
           <br>
-        
-          <input type="hidden" name="payment_30_percent" value="<?php echo ($total_price + $shipping_fee) * 0.3; ?>">
-                <input type="hidden" name="remaining_payment" value="<?php echo ($total_price + $shipping_fee) * 0.7; ?>">
-                <input type="hidden" name="total_payment" value="<?php echo $total_price + $shipping_fee; ?>">
+
+          <input type="hidden" name="payment_30_percent" value="<?php echo $thirtyPercent; ?>">
+                <input type="hidden" name="remaining_payment" value="<?php echo $remaining ;?>">
+                <input type="hidden" name="total_payment" value="<?php echo $grand; ?>">
                 <input type="hidden" name="method" value="<?php echo $method; ?>">
                 <input type="hidden" name="purok" value="<?php echo $purok; ?>">
                 <input type="hidden" name="barangay" value="<?php echo $barangay; ?>">
