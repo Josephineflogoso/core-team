@@ -156,7 +156,7 @@ $image=$_POST['image'];
 <div class="box-container">
 
 <?php  
-         $select_services = mysqli_query($conn, "SELECT * FROM `tbl_services` WHERE status = 'Available' LIMIT 50") or die('query failed');
+         $select_services = mysqli_query($conn, "SELECT * FROM `tbl_services` WHERE status = 'Available'") or die('query failed');
          if(mysqli_num_rows($select_services) > 0){
             while($fetch_services = mysqli_fetch_assoc($select_services)){
                $ID = $fetch_services ['services_id'];

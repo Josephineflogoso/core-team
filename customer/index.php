@@ -86,7 +86,6 @@ if(isset($_POST['add_to_cart'])){
    $product_quantity = $_POST['product_quantity'];
 
    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
-
    if(mysqli_num_rows($check_cart_numbers) > 0){
       echo '<script>
       Swal.fire({
@@ -101,7 +100,20 @@ if(isset($_POST['add_to_cart'])){
       })
    </script>';
    }else{
-      mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image')") or die('query failed');
+      $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
+     
+      if(mysqli_num_rows($check_cart_numbers1) > 0 )
+      {
+         $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
+         $transaction_code = $existing_cart_item['transac_code'];
+      }
+      else
+      {
+         $transaction_code = generateTransactionCode();
+      }
+    
+ 
+      mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image, transac_code) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image', '$transaction_code')") or die('query failed');
      
       echo '<script>
       Swal.fire({
@@ -119,6 +131,16 @@ if(isset($_POST['add_to_cart'])){
 
    }
 
+}
+function generateTransactionCode(){
+      $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $code_length = 8;
+      $transaction_code = '';
+      for ($i = 0; $i < $code_length; $i++) {
+         $index = rand(0, strlen($characters) - 1);
+         $transaction_code .= $characters[$index];
+      }
+   return $transaction_code;
 }
 
 if(isset($_POST['add_to_wishlist'])){
@@ -183,12 +205,25 @@ $image=$_POST['image'];
          timer: 2000,
       }).then((result) => {
          if (result) {
-            window.location.href = "./services.php";
+            window.location.href = "./index.php";
          }
       })
    </script>';
    }else{
-      mysqli_query($conn, "INSERT INTO `tbl_inquiry`(customer_id, services_name, services_image) VALUES('$customer_id', '$product_name', '$image')") or die('query failed');
+
+      $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_inquiry` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
+     
+      if(mysqli_num_rows($check_cart_numbers1) > 0 )
+      {
+         $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
+         $transaction_code = $existing_cart_item['transac_code'];
+      }
+      else
+      {
+         $transaction_code = generateTransactionCode();
+      }
+    
+      mysqli_query($conn, "INSERT INTO `tbl_inquiry`(customer_id, services_name, services_image, transac_code) VALUES('$customer_id', '$product_name', '$image','$transaction_code')") or die('query failed');
       
       echo '<script>
       Swal.fire({
@@ -228,7 +263,7 @@ $image=$_POST['image'];
 <div class="box-container">
 
       <?php  
-         $select_services = mysqli_query($conn, "SELECT * FROM `tbl_services` LIMIT 50") or die('query failed');
+         $select_services = mysqli_query($conn, "SELECT * FROM `tbl_services` WHERE status = 'Available' LIMIT 50") or die('query failed');
          if(mysqli_num_rows($select_services) > 0){
             while($fetch_services = mysqli_fetch_assoc($select_services)){
                $ID = $fetch_services ['services_id'];
@@ -266,7 +301,7 @@ $image=$_POST['image'];
    <div class="box-container">
 
       <?php  
-         $select_products = mysqli_query($conn, "SELECT * FROM `tbl_product` LIMIT 50") or die('query failed');
+         $select_products = mysqli_query($conn, "SELECT * FROM `tbl_product` WHERE stocks > 0  LIMIT 50") or die('query failed');
          if(mysqli_num_rows($select_products) > 0){
             while($fetch_products = mysqli_fetch_assoc($select_products)){
       ?>
