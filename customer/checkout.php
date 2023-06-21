@@ -186,20 +186,43 @@ else
 {
    $shipping_fee = 0;
 }
+if($method == 'Pick up')
+{
+$grand = $grand_total;
+$thirtyPercent = 0;
+$remaining = 0;
+}
+else
+{
+   $grand = $grand_total + $shipping_fee;
+   $thirtyPercent = $grand * .30;
+   $remaining = $grand - $thirtyPercent;
+}
 
-$grand = $grand_total + $shipping_fee;
-$thirtyPercent = $grand * .30;
-$remaining = $grand - $thirtyPercent;
 
 ?>
 <form action="" method = "POST">
 <div class="results">
 <p class="result1">Sub Total: ₱<?php echo $grand_total; ?></p>
-                <p class="result1">Shipping Fee: ₱<?php echo number_format($shipping_fee,2); ?></p>
+                  <?php if($method == 'Pick up')
+                  {
+                     ?>
+                     <p class="result1">Total Payment: ₱<?php echo number_format($grand,2); ?></p>
+                     <?php
+                  }
+                  else
+                  {
+                     ?>
+                      <p class="result1">Shipping Fee: ₱<?php echo number_format($shipping_fee,2); ?></p>
                 <p class="result1">Total Payment: ₱<?php echo number_format($grand,2); ?></p>
                 <br>
                 <p class="result1">30% of Total Payment: ₱<?php echo number_format($thirtyPercent,2); ?></p>
                 <p class="result1">Remaining Total: ₱<?php echo number_format($remaining,2); ?></p>
+
+                     <?php
+                  }
+               ?>
+               
           <br>
           <br>
 
@@ -259,7 +282,7 @@ while($rows=mysqli_fetch_assoc($cart_query1))
 }
 
   
-      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount,transac_code) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$cart_total', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment','$transac_code')";
+      $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount,transac_code) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$total_payment', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment','$transac_code')";
       $query=mysqli_query($conn, $sql);
       if ($query) {
         

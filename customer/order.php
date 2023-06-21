@@ -96,14 +96,18 @@ $fetch_customer = mysqli_fetch_assoc($customer_query);
 
                 ?>
                
-                <p> Order status : <span> <?php if($fetch_orders['order_status'] == 0)
+                <p> Order status : <span> <?php if($fetch_orders['order_status'] == 'Pending')
          {
             echo "Pending";
          }
-         else{
+         else if($fetch_orders['order_status'] == 'Completed'){
             echo "Complete";
 
-           } ?>
+           } else if($fetch_orders['order_status'] == 'Cancelled')
+           {
+            echo "Cancelled";
+           }
+           ?>
 
 
                     </span> </p>
