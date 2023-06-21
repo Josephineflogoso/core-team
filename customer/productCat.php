@@ -79,45 +79,89 @@ if(isset($_GET['id']))
 
 if(isset($_POST['add_to_cart'])){
 
-    $product_name = $_POST['product_name'];
-    $stocks = $_POST['stocks'];
-    $product_price = $_POST['product_price'];
-    $product_image = $_POST['product_image'];
-    $product_quantity = $_POST['product_quantity'];
- 
-    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id'") or die('query failed');
- 
-    if(mysqli_num_rows($check_cart_numbers) > 0){
+   $product_name = $_POST['product_name'];
+   $stocks = $_POST['stocks'];
+   $product_price = $_POST['product_price'];
+   $product_image = $_POST['product_image'];
+   $product_quantity = $_POST['product_quantity'];
+
+   if($product_quantity > $stocks)
+   {
       echo '<script>
       Swal.fire({
-         title: "already added to cart!",
+         title: "Not enough stocks!",
          icon: "error",
          showConfirmButton: false,
          timer: 2000,
       }).then((result) => {
          if (result) {
-            window.location.href = "./productCat.php?id=10";
+            window.location.href = "./productCat.php?id='.$id.'";
          }
       })
    </script>';
-    }else{
-       mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image) VALUES('$customer_id', '$product_name', '$stocks','$product_price', '$product_quantity', '$product_image')") or die('query failed');
-       echo '<script>
-       Swal.fire({
-          title: "Successfully",
-          text: "Product Added to Cart!",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 2000,
-       }).then((result) => {
-          if (result) {
-             window.location.href = "./productCat.php?id=10";
-          }
-       })
-    </script>';
-    }
- 
- }
+   }
+   else
+   {
+      $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
+      if(mysqli_num_rows($check_cart_numbers) > 0){
+         echo '<script>
+         Swal.fire({
+            title: "already added to cart!",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "./productCat.php?id='.$id.'";
+            }
+         })
+      </script>';
+      }else{
+         $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
+        
+         if(mysqli_num_rows($check_cart_numbers1) > 0 )
+         {
+            $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
+            $transaction_code = $existing_cart_item['transac_code'];
+         }
+         else
+         {
+            $transaction_code = generateTransactionCode();
+         }
+       
+    
+         mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image, transac_code) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image', '$transaction_code')") or die('query failed');
+        
+         echo '<script>
+         Swal.fire({
+            title: "Successfully",
+            text: "Product Added to Cart!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "./productCat.php?id='.$id.'";
+            }
+         })
+      </script>';
+   
+      }
+   }
+
+   
+
+}
+function generateTransactionCode(){
+      $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $code_length = 8;
+      $transaction_code = '';
+      for ($i = 0; $i < $code_length; $i++) {
+         $index = rand(0, strlen($characters) - 1);
+         $transaction_code .= $characters[$index];
+      }
+   return $transaction_code;
+}
 
  if(isset($_POST['add_to_wishlist'])){
 
@@ -183,7 +227,7 @@ if(isset($_POST['add_to_cart'])){
 <?php
   include_once "../administrator/config/dbconnect.php";
 
-  $sql="SELECT * from tbl_product WHERE category_id='$id'";
+  $sql="SELECT * from tbl_product WHERE category_id='$id' and stocks > 0";
   $result=$conn-> query($sql);
   $count=1;
   if ($result-> num_rows > 0){
@@ -198,7 +242,7 @@ if(isset($_POST['add_to_cart'])){
       <div class="price">₱ <?=(number_format($row['price'], 2)) ?></div>
       <input type="number" min="1" name="product_quantity" value="1" class="qty">
       <input type="hidden" name="product_name" value="<?=$row['product_name']; ?>">
-      <input type="hidden" name="stocks" value="<?php echo $fetch_products['stocks']; ?>">
+      <input type="hidden" name="stocks" value="<?=$row['stocks']; ?>">
       <input type="hidden" name="product_desc" value="<?=$row['product_desc']; ?>">
       <input type="hidden" name="product_price" value="<?=$row['price']; ?>">
       <input type="hidden" name="product_image" value="<?=$row['product_image']; ?>">
