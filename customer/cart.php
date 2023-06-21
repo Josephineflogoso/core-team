@@ -82,20 +82,39 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
    if(isset($_POST['update_cart'])){
       $cart_id = $_POST['cart_id'];
       $cart_quantity = $_POST['cart_quantity'];
-      mysqli_query($conn, "UPDATE `tbl_cart` SET quantity = '$cart_quantity' WHERE id = '$cart_id'") or die('query failed');
-   echo '<script>
-   Swal.fire({
-      title: "Success!",
-      text: "Cart updated successfully",
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1500,
-   }).then((result) => {
-      if (result) {
-         window.location.href = "cart.php";
+      if($cart_quantity > $_POST['stocks'])
+      {
+         echo '<script>
+         Swal.fire({
+            title: "Not enough stocks!",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "./cart.php";
+            }
+         })
+      </script>';
       }
-   })
-</script>';
+      else
+      {
+         mysqli_query($conn, "UPDATE `tbl_cart` SET quantity = '$cart_quantity' WHERE id = '$cart_id'") or die('query failed');
+         echo '<script>
+         Swal.fire({
+            title: "Success!",
+            text: "Cart updated successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "cart.php";
+            }
+         })
+      </script>';
+      }
+     
 }
 
    
@@ -161,6 +180,7 @@ function delete_item() {
          <form action="" method="post">
             <input type="hidden" name="cart_id" value="<?php echo $fetch_cart['id']; ?>">
             <input type="number" min="1" name="cart_quantity" value="<?php echo $fetch_cart['quantity']; ?>">
+            <input type="hidden" name="stocks" value="<?php echo $fetch_cart['stocks']; ?>">
             <input type="submit" name="update_cart" value="update" class="option-btn">
          </form>
          <div class="sub-total"> sub total : <span>₱ <?php echo $sub_total = ($fetch_cart['quantity'] * (number_format($fetch_cart['price'], 2))) ?></span> </div>

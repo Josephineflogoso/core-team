@@ -62,6 +62,52 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
 <body>
    
 <?php include 'header.php'; ?>
+
+
+<div class="heading">
+   <h3>our products</h3>
+   <p> <a href="index.php">home</a> / products </p>
+</div>
+
+
+<!-- products-->
+
+<section class="products">
+
+   <h1 class="title">Products</h1>
+
+   <div class="box-container">
+
+      <?php  
+         $select_products = mysqli_query($conn, "SELECT * FROM `tbl_product` WHERE stocks > 0") or die('query failed');
+         if(mysqli_num_rows($select_products) > 0){
+            while($fetch_products = mysqli_fetch_assoc($select_products)){
+      ?>
+     <form action="" method="post" class="box">
+      <img class="image" src="../administrator/<?php echo $fetch_products['product_image']; ?>" alt="">
+      <div class="name"><?php echo $fetch_products['product_name']; ?></div>
+      <div class="desc"><?php echo $fetch_products['product_desc']; ?></div>
+      <div class="stocks">Stocks: <?php echo $fetch_products['stocks']; ?></div>
+      <div class="price">₱ <?php echo (number_format($fetch_products['price'], 2)) ?></div>
+      <input type="number" min="1" name="product_quantity" value="1" class="qty">
+      <input type="hidden" name="product_name" value="<?php echo $fetch_products['product_name']; ?>">
+      <input type="hidden" name="stocks" value="<?php echo $fetch_products['stocks']; ?>">
+      <input type="hidden" name="product_desc" value="<?php echo $fetch_products['product_desc']; ?>">
+      <input type="hidden" name="product_price" value="<?php echo $fetch_products['price']; ?>">
+      <input type="hidden" name="product_image" value="<?php echo $fetch_products['product_image']; ?>">
+      <input type="submit" value="add to cart" name="add_to_cart" class="btn">
+      <input type="submit" value="add to wishlist" name="add_to_wishlist" class="btn">
+     </form>
+     
+      <?php
+         }
+      }else{
+         echo '<p class="empty">no products added yet!</p>';
+      }
+      ?>
+   </div>
+</section>
+
 <?php  
 
 if(!isset($customer_id)){
@@ -75,6 +121,25 @@ if(isset($_POST['add_to_cart'])){
    $product_price = $_POST['product_price'];
    $product_image = $_POST['product_image'];
    $product_quantity = $_POST['product_quantity'];
+   if($product_quantity > $_POST['stocks'])
+   {
+      echo '<script>
+      Swal.fire({
+         title: "Not enough stocks!",
+         icon: "error",
+         showConfirmButton: false,
+         timer: 2000,
+      }).then((result) => {
+         if (result) {
+            window.location.href = "./shop.php";
+         }
+      })
+   </script>';
+   }
+   else
+   {
+
+ 
 
    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
    if(mysqli_num_rows($check_cart_numbers) > 0){
@@ -121,6 +186,7 @@ if(isset($_POST['add_to_cart'])){
    </script>';
 
    }
+}
 
 }
 function generateTransactionCode(){
@@ -181,52 +247,6 @@ if(isset($_POST['add_to_wishlist'])){
 }
 
 ?>
-
-<div class="heading">
-   <h3>our products</h3>
-   <p> <a href="index.php">home</a> / products </p>
-</div>
-
-
-<!-- products-->
-
-<section class="products">
-
-   <h1 class="title">Products</h1>
-
-   <div class="box-container">
-
-      <?php  
-         $select_products = mysqli_query($conn, "SELECT * FROM `tbl_product` LIMIT 50") or die('query failed');
-         if(mysqli_num_rows($select_products) > 0){
-            while($fetch_products = mysqli_fetch_assoc($select_products)){
-      ?>
-     <form action="" method="post" class="box">
-      <img class="image" src="../administrator/<?php echo $fetch_products['product_image']; ?>" alt="">
-      <div class="name"><?php echo $fetch_products['product_name']; ?></div>
-      <div class="desc"><?php echo $fetch_products['product_desc']; ?></div>
-      <div class="stocks">Stocks: <?php echo $fetch_products['stocks']; ?></div>
-      <div class="price">₱ <?php echo (number_format($fetch_products['price'], 2)) ?></div>
-      <input type="number" min="1" name="product_quantity" value="1" class="qty">
-      <input type="hidden" name="product_name" value="<?php echo $fetch_products['product_name']; ?>">
-      <input type="hidden" name="stocks" value="<?php echo $fetch_products['stocks']; ?>">
-      <input type="hidden" name="product_desc" value="<?php echo $fetch_products['product_desc']; ?>">
-      <input type="hidden" name="product_price" value="<?php echo $fetch_products['price']; ?>">
-      <input type="hidden" name="product_image" value="<?php echo $fetch_products['product_image']; ?>">
-      <input type="submit" value="add to cart" name="add_to_cart" class="btn">
-      <input type="submit" value="add to wishlist" name="add_to_wishlist" class="btn">
-     </form>
-     
-      <?php
-         }
-      }else{
-         echo '<p class="empty">no products added yet!</p>';
-      }
-      ?>
-   </div>
-</section>
-
-
 
 
 

@@ -85,11 +85,11 @@ if(isset($_POST['add_to_cart'])){
    $product_image = $_POST['product_image'];
    $product_quantity = $_POST['product_quantity'];
 
-   $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
-   if(mysqli_num_rows($check_cart_numbers) > 0){
+   if($product_quantity > $_POST['stocks'])
+   {
       echo '<script>
       Swal.fire({
-         title: "already added to cart!",
+         title: "Not enough stocks!",
          icon: "error",
          showConfirmButton: false,
          timer: 2000,
@@ -99,37 +99,57 @@ if(isset($_POST['add_to_cart'])){
          }
       })
    </script>';
-   }else{
-      $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
-     
-      if(mysqli_num_rows($check_cart_numbers1) > 0 )
-      {
-         $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
-         $transaction_code = $existing_cart_item['transac_code'];
-      }
-      else
-      {
-         $transaction_code = generateTransactionCode();
-      }
-    
- 
-      mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image, transac_code) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image', '$transaction_code')") or die('query failed');
-     
-      echo '<script>
-      Swal.fire({
-         title: "Successfully",
-         text: "Product Added to Cart!",
-         icon: "success",
-         showConfirmButton: false,
-         timer: 2000,
-      }).then((result) => {
-         if (result) {
-            window.location.href = "./index.php";
-         }
-      })
-   </script>';
-
    }
+   else
+   {
+      $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE product_name = '$product_name' AND customer_id = '$customer_id' AND status=0") or die('query failed');
+      if(mysqli_num_rows($check_cart_numbers) > 0){
+         echo '<script>
+         Swal.fire({
+            title: "already added to cart!",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "./index.php";
+            }
+         })
+      </script>';
+      }else{
+         $check_cart_numbers1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' AND status=0") or die('query failed');
+        
+         if(mysqli_num_rows($check_cart_numbers1) > 0 )
+         {
+            $existing_cart_item = mysqli_fetch_assoc($check_cart_numbers1);
+            $transaction_code = $existing_cart_item['transac_code'];
+         }
+         else
+         {
+            $transaction_code = generateTransactionCode();
+         }
+       
+    
+         mysqli_query($conn, "INSERT INTO `tbl_cart`(customer_id, product_name, stocks, price, quantity, image, transac_code) VALUES('$customer_id', '$product_name', '$stocks', '$product_price', '$product_quantity', '$product_image', '$transaction_code')") or die('query failed');
+        
+         echo '<script>
+         Swal.fire({
+            title: "Successfully",
+            text: "Product Added to Cart!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+         }).then((result) => {
+            if (result) {
+               window.location.href = "./index.php";
+            }
+         })
+      </script>';
+   
+      }
+   }
+
+   
 
 }
 function generateTransactionCode(){
