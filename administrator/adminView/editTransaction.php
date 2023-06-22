@@ -20,7 +20,7 @@
     </div>
     <div class="form-group">
       <label for="price">Unit Price:</label>
-      <input type="number" class="form-control" id="price" value="<?=$row1['price']?>" required>
+      <input type="number" class="form-control" id="price" value="<?=$row1['stock_price']?>" required>
     </div>
     <div class="form-group">
       <label for="date">Date:</label>
