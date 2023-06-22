@@ -16,7 +16,7 @@
     </thead>
     <?php
       include_once "../config/dbconnect.php";
-      $sql="SELECT * from tbl_transaction";
+      $sql="SELECT * from tbl_transaction t INNER JOIN tbl_product p  ON t.product_id = p.product_id";
       $result=$conn-> query($sql);
       $count=1;
       if ($result-> num_rows > 0){
@@ -25,10 +25,10 @@
     <tr>
       <td><?=$count?></td>
       <td><?=$row["product_name"]?></td>
-      <td><?=$row["stocks"]?></td>       
-      <td><?=$row["price"]?></td>   
+      <td><?=$row["stock"]?></td>       
+      <td><?=$row["stock_price"]?></td>   
       <td><?=$row["date"]?></td>
-      <td><button class="btn btn-primary" style="height:40px" onclick="editTransaction('<?=$row['transaction_id']?>')">Edit</button></td>
+      <td><button class="btn btn-primary" style="height:40px" onclick="editTransaction('<?=$row['product_id']?>')">Edit</button></td>
       </tr>
       <?php
             $count=$count+1;

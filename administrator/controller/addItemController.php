@@ -1,8 +1,7 @@
 <?php
     include_once "../config/dbconnect.php";
     
-    if(isset($_POST['upload']))
-    {
+
        
         $ProductName = $_POST['p_name'];
         $desc= $_POST['p_desc']; 
@@ -40,12 +39,9 @@
          }
          else
          {
-            echo "<script>alert('Records added successfully...!')</script>";
-            echo "<script>window.location = 'index.php#products'</script>";
+            $productId = mysqli_insert_id($conn);
+            $insertTransaction = mysqli_query($conn, "INSERT INTO tbl_transaction (product_id, stock_price) VALUES ($productId, $price)");
             
          }
         }
-     
-    }
-        
 ?>

@@ -27,6 +27,30 @@
       $count=1;
       if ($result-> num_rows > 0){
         while ($row=$result-> fetch_assoc()) {
+            $productId = $row["product_id"];
+        $currentStocks = $row["stocks"];
+        
+        if ($currentStocks == 0) {
+  
+            $getStocksQuery = "SELECT * FROM tbl_transaction WHERE product_id = $productId";
+            $getStocksResult = $conn->query($getStocksQuery);
+            $stocksRow = $getStocksResult->fetch_assoc();
+            $stocks = $stocksRow["stock"];
+            $price = $stocksRow["stock_price"];
+
+
+            $updateProductQuery = "UPDATE tbl_product SET stocks = $stocks, price = $price WHERE product_id = $productId";
+            $updateProductResult = $conn->query($updateProductQuery);
+            if($updateProductQuery)
+            {
+                $updateTransactionQuery = "UPDATE tbl_transaction SET stock = 0 WHERE product_id = $productId";
+                $updateTransactionResult = $conn->query($updateTransactionQuery);
+    
+            }
+
+      
+           
+        }
     ?>
         <tr>
             <td><?=$count?></td>

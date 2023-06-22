@@ -36,8 +36,6 @@ function addServices() {
         confirmButtonText: "Ok",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = "../administrator/index.php?#services";
-          $("form").trigger("reset");
           showServices();
         }
       });
@@ -567,13 +565,13 @@ function editTransaction(id) {
 
 //update transaction after submit
 function updateTransaction() {
-  var transaction_id = $("#transaction_id").val();
-  var stocks = $("#stocks").val();
+  var product_id = $("#product_id").val();
+  var stock = $("#stock").val();
   var price = $("#price").val();
   var date = $("#date").val();
   var fd = new FormData();
-  fd.append("transaction_id", transaction_id);
-  fd.append("stocks", stocks);
+  fd.append("product_id", product_id);
+  fd.append("stock", stock);
   fd.append("price", price);
   fd.append("date", date);
   $.ajax({

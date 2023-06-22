@@ -9,28 +9,27 @@
     $status= $_POST['status'];
 
 
-    if( isset($_FILES['newImage']) ){
-        
+    if($_FILES['newImage'] =='' ){
+        $image=$_POST['existingImage'];
+       
+    }else{    
+        $name = $_FILES['newImage']['name'];
+        $temp = $_FILES['newImage']['tmp_name'];
         $location="./assets/img";
-        $img = $_FILES['newImage']['name'];
-        $tmp = $_FILES['newImage']['tmp_name'];
-        $dir = '../assets/img';
-        $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
-        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif','webp');
-        $image =rand(1000,1000000).".".$ext;
-        $final_image=$location. $image;
-        if (in_array($ext, $valid_extensions)) {
-            $path = UPLOAD_PATH . $image;
-            move_uploaded_file($tmp, $dir.$image);
-        }
-    }else{
-        $final_image=$_POST['existingImage'];
+        $image=$location.$name;
+
+        $target_dir="../assets/img";
+        $finalImage=$target_dir.$name;
+
+        move_uploaded_file($temp,$finalImage);
+        
+      
     }
     $updateItem = mysqli_query($conn,"UPDATE tbl_services SET 
         services_name='$s_name', 
         services_desc='$s_desc', 
         status='$status',
-        image='$final_image' 
+        image='$image' 
         WHERE services_id=$services_id");
 
 

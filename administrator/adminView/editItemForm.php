@@ -13,7 +13,7 @@
 ?>
 <form id="update-Items" onsubmit="updateItems()" enctype='multipart/form-data'>
 	<div class="form-group">
-      <input type="text" class="form-control" id="product_id" value="<?=$row1['product_id']?>" hidden>
+      <input type="number" class="form-control" id="product_id" value="<?=$row1['product_id']?>" hidden>
     </div>
     <div class="form-group">
       <label for="name">Product Name:</label>
