@@ -505,6 +505,18 @@ function ChangeOrderStatus(id,status) {
     },
   });
 }
+function getStocks(id) {
+  console.log(id);
+  $.ajax({
+    url: "./controller/getStocks.php",
+    method: "post",
+    data: {id: id},
+    success: function (data) {
+      alert ("Stocks is transferred from Transactions to Products");
+      showProductItems();
+    },
+  });
+}
 
 function showSale() {
   $.ajax({

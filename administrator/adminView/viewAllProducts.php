@@ -30,27 +30,7 @@
             $productId = $row["product_id"];
         $currentStocks = $row["stocks"];
         
-        if ($currentStocks == 0) {
-  
-            $getStocksQuery = "SELECT * FROM tbl_transaction WHERE product_id = $productId";
-            $getStocksResult = $conn->query($getStocksQuery);
-            $stocksRow = $getStocksResult->fetch_assoc();
-            $stocks = $stocksRow["stock"];
-            $price = $stocksRow["stock_price"];
-
-
-            $updateProductQuery = "UPDATE tbl_product SET stocks = $stocks, price = $price WHERE product_id = $productId";
-            $updateProductResult = $conn->query($updateProductQuery);
-            if($updateProductQuery)
-            {
-                $updateTransactionQuery = "UPDATE tbl_transaction SET stock = 0 WHERE product_id = $productId";
-                $updateTransactionResult = $conn->query($updateTransactionQuery);
-    
-            }
-
       
-           
-        }
     ?>
         <tr>
             <td><?=$count?></td>
@@ -60,8 +40,27 @@
             <td><?=$row["stocks"]?></td>
             <td><?=$row["category_name"]?></td>
             <td><?=$row["price"]?></td>
-            <td><button class="btn btn-primary" style="height:40px"
-                    onclick="itemEditForm('<?=$row['product_id']?>')">Edit</button></td>
+            <td>
+                <?php
+                if($row['stocks'] <= 0)
+                {
+                    ?>
+                     <button class="btn btn-primary" style="height:40px"
+                    onclick="getStocks('<?=$row['product_id']?>')">Get Stocks</button>
+                    <button class="btn btn-primary" style="height:40px"
+                    onclick="itemEditForm('<?=$row['product_id']?>')">Edit</button>
+                    <?php
+                } 
+                else
+                {
+                    ?>
+ <button class="btn btn-primary" style="height:40px"
+                    onclick="itemEditForm('<?=$row['product_id']?>')">Edit</button>
+                    <?php
+                }
+                ?>
+                </td>
+               
         </tr>
         <?php
             $count=$count+1;

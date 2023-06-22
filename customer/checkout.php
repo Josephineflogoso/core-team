@@ -270,22 +270,22 @@ if(isset($_POST['order_now']))
 
    }
    
-$cart_query1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id'") or die('query failed');
-while($rows=mysqli_fetch_assoc($cart_query1))
-{
- $name=$rows['product_name'];
- $qnty=$rows['quantity'];
 
- $sql1="UPDATE tbl_product SET stocks= stocks - '$qnty' WHERE product_name='$name'";
- $res2=mysqli_query($conn, $sql1);
-
-}
 
   
       $sql= "INSERT INTO `tbl_order`(customer_id, method, purok, barangay, municipality, total_price, product_name,`30%`, remaining,total_amount,transac_code) VALUES('$customer_id', '$method', '$purok', '$barangay', '$municipality', '$total_payment', '" . implode(', ', $cart_products) . "','$payment_30_percent','$remaining_payment','$total_payment','$transac_code')";
       $query=mysqli_query($conn, $sql);
       if ($query) {
-        
+         $cart_query1 = mysqli_query($conn, "SELECT * FROM `tbl_cart` WHERE customer_id = '$customer_id' and status = 0") or die('query failed');
+         while($rows=mysqli_fetch_assoc($cart_query1))
+         {
+          $name=$rows['product_name'];
+          $qnty=$rows['quantity'];
+         
+          $sql1="UPDATE tbl_product SET stocks= stocks - '$qnty' WHERE product_name='$name'";
+          $res2=mysqli_query($conn, $sql1);
+         
+         }
          echo "<script>
          Swal.fire({
             icon: 'success',
