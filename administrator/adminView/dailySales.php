@@ -14,7 +14,7 @@ $newDate2= $newDate2->format('F d, Y');
 <div id="ordersBtn" >
     <div style="display:flex; justify-content:space-between;">
   <h2>Daily Sales</h2>
-  <h2>From:<?php echo $newDate1; ?> To: <?php echo $newDate2; ?>  </h2>
+  <h5>From:<?php echo $newDate1; ?> To: <?php echo $newDate2; ?>  </h5>
   <a href="adminView/dailyprint.php?date1=<?php echo $date1; ?> & date2=<?php echo $date2; ?>"><button class="btn btn-primary">Print</button></a>
   </div>
   <span>From: </span><input type="date" id = "dateInput1" name = "date">
@@ -46,7 +46,7 @@ $newDate2= $newDate2->format('F d, Y');
      <?php
       $sql="SELECT * from tbl_order where order_status = 'Completed' and date between '$date1' and '$date2'";
       $result=$conn-> query($sql);
-      
+      $sn=1;
       if ($result-> num_rows > 0){
         while ($row=$result-> fetch_assoc()) {
           $id=$row['customer_id'];
@@ -55,7 +55,7 @@ $newDate2= $newDate2->format('F d, Y');
     ?>
 
        <tr>
-          <td><?=$row["order_id"]?></td>
+          <td><?=$sn++?></td>
           <?php 
           $sql="SELECT * FROM tbl_customer WHERE customer_id = $id ";
           $res = mysqli_query($conn, $sql);

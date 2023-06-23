@@ -529,6 +529,28 @@ function showSale(date1,date2) {
     },
   });
 }
+function showMonth(month) {
+  console.log(month);
+  $.ajax({
+    url: "./adminView/monthlySales.php",
+    method: "post",
+    data: { month:month },
+    success: function (data) {
+      $(".allContent-section").html(data);
+    },
+  });
+}
+function showYear(year) {
+  console.log(year);
+  $.ajax({
+    url: "./adminView/annualSales.php",
+    method: "post",
+    data: { year:year },
+    success: function (data) {
+      $(".allContent-section").html(data);
+    },
+  });
+}
 
 function showInvent() {
   $.ajax({

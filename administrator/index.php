@@ -84,6 +84,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
 <?php
 $date1 = date('Y-m-d');
 $date2 = date('Y-m-d');
+$month = date('Y-m');
+$year = date('Y');
 
 ?>
 
@@ -102,16 +104,12 @@ $date2 = date('Y-m-d');
     <a href="#sale" onclick="showSalesReport()" ><i class="fa fa-line-chart" aria-hidden="true"></i> Sales Reports</a>
     <ul class="ul">
         <a href="#dailysales" onclick="showSale('<?php echo $date1; ?>','<?php echo $date2; ?>')"><li><i class="fa fa-line-chart" aria-hidden="true"></i> Daily Sales</li></a>
-        <a href=""><li><i class="fa fa-line-chart" aria-hidden="true"></i> Monthly Sales</li></a>
-        <a href=""><li><i class="fa fa-line-chart" aria-hidden="true"></i> Annual Sales</li></a>
+        <a href="#monthlysales" onclick = "showMonth('<?php echo $month; ?>')"><li><i class="fa fa-line-chart" aria-hidden="true"></i> Monthly Sales</li></a>
+        <a href="#annualsales" onclick = "showYear('<?php echo $year; ?>')"><li><i class="fa fa-line-chart" aria-hidden="true"></i> Annual Sales</li></a>
     </ul>
     <a href="#invent" onclick="showInvent()" ><i class="fa fa-file-text" aria-hidden="true"></i> Inventory Reports</a> 
 </div>
  
-<div id="main">
-    <button class="openbtn" onclick="openNav()"><i class="fa fa-bars" aria-hidden="true"></i></button>
-</div>
-
     <div id="main-content" class="container allContent-section py-4">
         <div class="row">
             <div class="col-sm-4">

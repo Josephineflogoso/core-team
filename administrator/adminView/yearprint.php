@@ -18,8 +18,8 @@ if (isset($_GET['year'])) {
     $pdf->SetFont('helvetica', 'b', 11);
 
     $pdf->AddPage();
-    $pdf->Cell(0, 6, 'MARINOS CAFE', 0, 1, 'C');
-    $pdf->Cell(0, 6, 'Sibalom, Antique', 0, 1, 'C');
+    $pdf->Cell(0, 6, 'A&R E-commerce', 0, 1, 'C');
+    $pdf->Cell(0, 6, ' Barangbang, San Remigio, Antique Philippines', 0, 1, 'C');
 
     $pdf->SetFont('helvetica', 'b', 13);
     $pdf->Cell(0, 10, ' Annual SALES REPORT', 0, 1, 'C');
@@ -33,7 +33,7 @@ if (isset($_GET['year'])) {
     $pdf->Ln();
     $sn = 1;
 
-    $query = "SELECT MONTH(date) as order_date, COUNT(*) as total_orders, SUM(total) as total_sales FROM `order` WHERE YEAR(date) = $year and status != 0 GROUP BY MONTH(date)";
+    $query = "SELECT MONTH(date) as order_date, COUNT(*) as total_orders, SUM(total_amount) as total_sales FROM `tbl_order` WHERE YEAR(date) = $year and order_status = 'Completed' GROUP BY MONTH(date)";
 
     $result = $conn->query($query);
     $count = mysqli_num_rows($result);
@@ -57,7 +57,7 @@ if (isset($_GET['year'])) {
         $pdf->Ln();
     }
 
-    $sql2 = "SELECT SUM(total)  AS sum from `order` where YEAR(date)='$year' and status!=0";
+    $sql2 = "SELECT SUM(total_amount)  AS sum from `tbl_order` where YEAR(date)='$year' and order_status = 'Completed'";
     $res2 = mysqli_query($conn, $sql2);
     $count2 = mysqli_num_rows($res2);
     $row2 = mysqli_fetch_assoc($res2);
@@ -70,8 +70,6 @@ if (isset($_GET['year'])) {
 
 $pdf->Output('report1.pdf', 'I');
 
-$pdf->AutoPrint();
-header('Location: daily_reports.php');
 
 exit();
 ?>

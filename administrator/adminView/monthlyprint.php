@@ -8,7 +8,7 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
     $year = $_GET['year'];
     $month1 = date('F', mktime(0, 0, 0, $month, 10));
 
-    $sql = "SELECT * FROM `order` WHERE MONTH(date) = '$month' and YEAR(date)='$year' AND status !=0";
+    $sql = "SELECT * FROM `tbl_order` WHERE MONTH(date) = '$month' and YEAR(date)='$year' AND order_status='Completed'";
     $res = mysqli_query($conn, $sql);
 
     $pdf = new TCPDF();
@@ -20,8 +20,8 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
     $pdf->SetFont('helvetica', 'b', 11);
 
     $pdf->AddPage();
-    $pdf->Cell(0, 6, 'MARINOS CAFE', 0, 1, 'C');
-    $pdf->Cell(0, 6, 'Sibalom, Antique', 0, 1, 'C');
+    $pdf->Cell(0, 6, 'A&R E-commerce', 0, 1, 'C');
+    $pdf->Cell(0, 6, ' Barangbang, San Remigio, Antique Philippines', 0, 1, 'C');
 
     $pdf->SetFont('helvetica', 'b', 13);
     $pdf->Cell(0, 10, ' MONTHLY SALES REPORT', 0, 1, 'C');
@@ -31,11 +31,11 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
     $pdf->Cell(15, 10, 'No.', 1, 0, 'C');
     $pdf->Cell(60, 10, 'Date', 1, 0, 'C');
     $pdf->Cell(60, 10, 'Total Orders', 1, 0, 'C');
-    $pdf->Cell(60, 10, 'Total Sales', 1, 0, 'C');
+    $pdf->Cell(60, 10, 'Total Daily Sales', 1, 0, 'C');
     $pdf->Ln();
     $sn = 1;
 
-    $query = "SELECT DATE(date) as order_date, COUNT(*) as total_orders, SUM(total) as total_sales FROM `order` WHERE MONTH(date) = $month AND YEAR(date) = $year and status != 0 GROUP BY date";
+    $query = "SELECT DATE(date) as order_date, COUNT(*) as total_orders, SUM(total_amount) as total_sales FROM `tbl_order` WHERE MONTH(date) = $month AND YEAR(date) = $year and order_status = 'Completed' GROUP BY date";
 
     $result = $conn->query($query);
     $count = mysqli_num_rows($result);
@@ -59,7 +59,7 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
         $pdf->Ln();
     }
 
-    $sql2 = "SELECT SUM(total)  AS sum from `order` where MONTH(date)='$month' and YEAR(date)='$year' and status!=0";
+    $sql2 = "SELECT SUM(total_amount)  AS sum from `tbl_order` where MONTH(date)='$month' and YEAR(date)='$year' and order_status = 'Completed'";
     $res2 = mysqli_query($conn, $sql2);
     $count2 = mysqli_num_rows($res2);
     $row2 = mysqli_fetch_assoc($res2);
@@ -72,8 +72,6 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
 
 $pdf->Output('report1.pdf', 'I');
 
-$pdf->AutoPrint();
-header('Location: daily_reports.php');
 
 exit();
 ?>
