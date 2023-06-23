@@ -1,9 +1,16 @@
 <?php  include_once "../config/dbconnect.php"; 
 session_start();
+
 ?>
+
 
 <div id="ordersBtn" >
   <h2>Order Details</h2>
+
+
+
+
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -22,7 +29,7 @@ session_start();
      <?php
       $sql="SELECT * from tbl_order";
       $result=$conn-> query($sql);
-      
+      $sn=1;
       if ($result-> num_rows > 0){
         while ($row=$result-> fetch_assoc()) {
           $id=$row['customer_id'];
@@ -30,9 +37,9 @@ session_start();
           $tcode = $row['transac_code'];
     ?>
        <tr>
-          <td><?=$row["order_id"]?></td>
+          <td><?=$sn++;?></td>
           <?php 
-          $sql="SELECT * FROM tbl_customer WHERE customer_id = $id";
+          $sql="SELECT * FROM tbl_customer WHERE customer_id = $id ";
           $res = mysqli_query($conn, $sql);
           $rows=mysqli_fetch_assoc($res);
           

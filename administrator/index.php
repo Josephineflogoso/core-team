@@ -55,6 +55,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
 .swal2-cancel {
    font-size: 10rem;
 }
+
+.ul{
+    margin-left:50px;
+    list-style:none;
+    display:none;
+}
 </style>
 
   </head>
@@ -75,6 +81,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
     <img src="./assets/img/ar-logo.png" width="100" height="100" alt="administrator"> 
     <h5 style="margin-top:7px;">A&R E-commerce</h5>
 </div>
+<?php
+$date1 = date('Y-m-d');
+$date2 = date('Y-m-d');
+
+?>
 
 <hr style="border:1px solid; background-color:#064770; border-color:#064770;">
     <a href="./index.php" ><i class="fa fa-bars" aria-hidden="true"></i></i> Dashboard</a>
@@ -88,7 +99,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
     <a href="#transaction"   onclick="showTransaction()" ><i class="fa fa-th"></i> History Transaction</a>
     <a href="#orders" onclick="showOrders()" ><i class="fa fa-list-alt" aria-hidden="true"></i> Orders</a>
     <a href="#shipping"   onclick="showShipping()" ><i class="fa fa-truck" aria-hidden="true"></i> Shipping Fees</a>
-    <a href="#sale" onclick="showSale()" ><i class="fa fa-line-chart" aria-hidden="true"></i> Sales Reports</a>
+    <a href="#sale" onclick="showSalesReport()" ><i class="fa fa-line-chart" aria-hidden="true"></i> Sales Reports</a>
+    <ul class="ul">
+        <a href="#dailysales" onclick="showSale('<?php echo $date1; ?>','<?php echo $date2; ?>')"><li><i class="fa fa-line-chart" aria-hidden="true"></i> Daily Sales</li></a>
+        <a href=""><li><i class="fa fa-line-chart" aria-hidden="true"></i> Monthly Sales</li></a>
+        <a href=""><li><i class="fa fa-line-chart" aria-hidden="true"></i> Annual Sales</li></a>
+    </ul>
     <a href="#invent" onclick="showInvent()" ><i class="fa fa-file-text" aria-hidden="true"></i> Inventory Reports</a> 
 </div>
  
@@ -235,7 +251,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
             }
         
         ?>
-
+<script>
+  function showSalesReport() {
+    var ul = document.querySelector('.ul');
+    ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
 
     <script type="text/javascript" src="./assets/js/ajaxWork.js"></script>    
     <script type="text/javascript" src="./assets/js/script.js"></script>

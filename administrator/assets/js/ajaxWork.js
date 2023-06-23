@@ -487,7 +487,7 @@ function showOrders() {
   $.ajax({
     url: "./adminView/viewEachOrder.php",
     method: "post",
-    data: { record: 1 },
+    data: { record:1},
     success: function (data) {
       $(".allContent-section").html(data);
     },
@@ -519,11 +519,11 @@ function getStocks(id) {
   });
 }
 
-function showSale() {
+function showSale(date1,date2) {
   $.ajax({
-    url: "./adminView/viewSales.php",
+    url: "./adminView/dailySales.php",
     method: "post",
-    data: { record: 1 },
+    data: { date1:date1, date2:date2 },
     success: function (data) {
       $(".allContent-section").html(data);
     },
