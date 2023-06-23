@@ -495,6 +495,7 @@ function showOrders() {
 }
 
 function ChangeOrderStatus(id,status) {
+  console.log(id, status);
   $.ajax({
     url: "./controller/updateOrderStatus.php",
     method: "post",

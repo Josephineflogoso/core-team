@@ -18,7 +18,7 @@
       $count=1;
       if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-          $getQuantity=mysqli_query($conn,"SELECT SUM(quantity) as quantity FROM tbl_cart WHERE product_name = '$row[product_name]' ");
+          $getQuantity=mysqli_query($conn,"SELECT SUM(quantity) as quantity FROM tbl_cart WHERE product_name = '$row[product_name]' AND status = 1 ");
           $count = mysqli_fetch_assoc($getQuantity);
   
     ?>
