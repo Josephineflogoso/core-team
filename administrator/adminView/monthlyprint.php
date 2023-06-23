@@ -6,7 +6,6 @@ include_once "../config/dbconnect.php";
 if (isset($_GET['month']) && isset($_GET['year'])) {
     $month = $_GET['month'];
     $year = $_GET['year'];
-    $month1 = date('F', mktime(0, 0, 0, $month, 10));
 
     $sql = "SELECT * FROM `tbl_order` WHERE MONTH(date) = '$month' and YEAR(date)='$year' AND order_status='Completed'";
     $res = mysqli_query($conn, $sql);
@@ -25,7 +24,7 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
 
     $pdf->SetFont('helvetica', 'b', 13);
     $pdf->Cell(0, 10, ' MONTHLY SALES REPORT', 0, 1, 'C');
-    $pdf->Cell(0, 8, $month1 . ' ' . $year, 0, 1, 'C');
+    $pdf->Cell(0, 8, $month.'-' . $year, 0, 1, 'C');
 
     $pdf->SetFont('helvetica', 'b', 11);
     $pdf->Cell(15, 10, 'No.', 1, 0, 'C');
